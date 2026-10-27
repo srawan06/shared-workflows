@@ -1,0 +1,27 @@
+name: Reusable Python CI
+
+on:
+  workflow_call:
+    inputs:
+      app-name:
+        required: true
+        type: string
+      python-version:
+        required: false
+        type: string
+        default: "3.12"
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest
+      - name: Summary
+        run: echo "CI passed for ${{ inputs.app-name }}"
